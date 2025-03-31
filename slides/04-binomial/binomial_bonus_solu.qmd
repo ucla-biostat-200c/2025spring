@@ -1,0 +1,96 @@
+---
+title: "Bonus question, Binary Response (ELMR Chapter 2)"
+author: "Dr. Jin Zhou @ UCLA"
+subtitle: Biostat 200C
+date: today
+format:
+  html:
+    theme: cosmo
+    embed-resources: true
+    number-sections: true
+    toc: true
+    toc-depth: 4
+    toc-location: left
+    code-fold: false
+engine: knitr
+knitr:
+  opts_chunk: 
+    fig.align: 'center'
+    # fig.width: 6
+    # fig.height: 4
+    message: FALSE
+    cache: false
+---
+```{r}
+rm(list=ls())
+sessionInfo()
+library(tidyverse)
+library(faraway)
+library(gtsummary)
+```
+
+## Binomial model
+
+- We model $Y_i$ as a Binomial random variable with batch size $m_i$ and "success" probability $p_i$
+$$
+\mathbb{P}(Y_i = y_i) = \binom{m_i}{y_i} p_i^{y_i} (1 - p_i)^{m_i - y_i}.
+$$
+
+- The parameter $p_i$ is linked to the predictors $X_1, \ldots, X_{q}$ via an **inverse link function**
+$$
+p_i = \frac{e^{\eta_i}}{1 + e^{\eta_i}},
+$$
+where $\eta_i$ is the **linear predictor** or **systematic component**
+$$
+\eta_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_{q} x_{iq} = \mathbf{x}_i^T \boldsymbol{\beta}
+$$
+
+- The log-likelihood is
+\begin{eqnarray*}
+\ell(\boldsymbol{\beta}) &=& \sum_{i=1}^n \left[ y_i \log p_i + (m_i - y_i) \log (1 - p_i) + \log \binom{m_i}{y_i} \right] \\
+&=& \sum_{i=1}^n \left[ y_i \eta_i - m_i \log ( 1 + e^{\eta_i}) + \log \binom{m_i}{y_i} \right] \\
+&=& \sum_{i=1}^n \left[ y_i \cdot \mathbf{x}_i^T \boldsymbol{\beta} - m_i \log ( 1 + e^{\mathbf{x}_i^T \boldsymbol{\beta}}) + \log \binom{m_i}{y_i} \right].
+\end{eqnarray*}
+
+- The Bernoulli model in ELMR 2 is a special case with all batch sizes $m_i = 1$. 
+
+- Conversely, the Binomial model is equivalent to a Bernoulli model with $\sum_i m_i$ observations, or a Bernoulli model with observation weights $(y_i, m_i - y_i)$. 
+
+- The Binomial model is an equivalent (weighted) Bernoulli model.
+```{r}
+obs_wt = c(rbind(orings$damage, 6 - orings$damage))
+(orings_long <- orings %>%
+  slice(rep(1:n(), each = 2)) %>% # replicate each row twice
+  mutate(damage = rep(c(1, 0), 23)) %>%
+  mutate(obs_wt = obs_wt) %>%
+  mutate(rn = row_number()) %>%
+  rowwise() %>%
+  slice(rep(1, obs_wt)) %>%
+  select(-rn))
+```
+
+```{r}
+glm(damage ~ temp, family = binomial, data = orings_long) %>%
+  tbl_regression(intercept = TRUE)
+```
+
+- We write out the log-likelihood for this reformatted data with binary outcome. Given $n = \sum_{i} m_i$ (where $m_i$ is the batch size) data points $(y_i, \mbox{temp}_i)$, $i=1,\ldots,n$, the **log-likelihood** is
+\begin{eqnarray*}
+\ell(\boldsymbol{\beta}) &=& \sum_i \log \left[p_i^{y_i} (1 - p_i)^{1 - y_i}\right] \\
+&=& \sum_i \left[ y_i \log p_i + (1 - y_i) \log (1 - p_i) \right] \\
+&=& \sum_i \left[ y_i \log \frac{e^{\eta_i}}{1 + e^{\eta_i}} + (1 - y_i) \log \frac{1}{1 + e^{\eta_i}}  \right] \\
+&=& \sum_i \left[ y_i \eta_i - \log (1 + e^{\eta_i}) \right] \\
+&=& \sum_i \left[ y_i \cdot (\beta_0 + \beta_1 \mbox{temp}_i) - \log (1 + e^{\beta_0 + \beta_1 \mbox{temp}_i}) \right].
+\end{eqnarray*}
+
+- Therefore,
+
+\begin{eqnarray*}
+\ell(\boldsymbol{\beta}) 
+&=& \sum_i \left[ y_i \cdot (\beta_0 + \beta_1 \mbox{temp}_i) - \log (1 + e^{\beta_0 + \beta_1 \mbox{temp}_i}) \right]\\
+&=&  \mbox{obs\_wt}_1 * \left[ \mathbf{1} \cdot (\beta_0 + \beta_1 \mbox{temp}_1) - \log (1 + e^{\beta_0 + \beta_1 \mbox{temp}_1}) \right]  + \\
+&&   \mbox{obs\_wt}_2 * \left[ \mathbf{0} \cdot (\beta_0 + \beta_1 \mbox{temp}_1) - \log (1 + e^{\beta_0 + \beta_1 \mbox{temp}_1}) \right] + \\ 
+&& \cdots + \\
+&& \mbox{obs\_wt}_{45} * \left[ \mathbf{1} \cdot (\beta_0 + \beta_1 \mbox{temp}_{46}) - \log (1 + e^{\beta_0 + \beta_1 \mbox{temp}_{45}}) \right]\\
+&&  \mbox{obs\_wt}_{46} * \left[ \mathbf{0} \cdot (\beta_0 + \beta_1 \mbox{temp}_{46}) - \log (1 + e^{\beta_0 + \beta_1 \mbox{temp}_{46}}) \right].
+\end{eqnarray*}

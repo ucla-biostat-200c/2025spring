@@ -1,0 +1,64 @@
+---
+title: "Bonus question, Binary Response (ELMR Chapter 2)"
+author: "Dr. Jin Zhou @ UCLA"
+subtitle: Biostat 200C
+date: today
+format:
+  html:
+    theme: cosmo
+    embed-resources: true
+    number-sections: true
+    toc: true
+    toc-depth: 4
+    toc-location: left
+    code-fold: false
+engine: knitr
+knitr:
+  opts_chunk: 
+    fig.align: 'center'
+    # fig.width: 6
+    # fig.height: 4
+    message: FALSE
+    cache: false
+---
+```{r}
+rm(list=ls())
+sessionInfo()
+library(tidyverse)
+library(faraway)
+library(gtsummary)
+```
+
+## Binomial model
+
+- We model $Y_i$ as a Binomial random variable with batch size $m_i$ and "success" probability $p_i$
+$$
+\mathbb{P}(Y_i = y_i) = \binom{m_i}{y_i} p_i^{y_i} (1 - p_i)^{m_i - y_i}.
+$$
+
+- The parameter $p_i$ is linked to the predictors $X_1, \ldots, X_{q}$ via an **inverse link function**
+$$
+p_i = \frac{e^{\eta_i}}{1 + e^{\eta_i}},
+$$
+where $\eta_i$ is the **linear predictor** or **systematic component**
+$$
+\eta_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_{q} x_{iq} = \mathbf{x}_i^T \boldsymbol{\beta}
+$$
+
+- The log-likelihood is
+\begin{eqnarray*}
+\ell(\boldsymbol{\beta}) &=& \sum_{i=1}^n \left[ y_i \log p_i + (m_i - y_i) \log (1 - p_i) + \log \binom{m_i}{y_i} \right] \\
+&=& \sum_{i=1}^n \left[ y_i \eta_i - m_i \log ( 1 + e^{\eta_i}) + \log \binom{m_i}{y_i} \right] \\
+&=& \sum_{i=1}^n \left[ y_i \cdot \mathbf{x}_i^T \boldsymbol{\beta} - m_i \log ( 1 + e^{\mathbf{x}_i^T \boldsymbol{\beta}}) + \log \binom{m_i}{y_i} \right].
+\end{eqnarray*}
+
+## Binomial model vs Binomial model
+- The Bernoulli model in ELMR 2 is a special case with all batch sizes $m_i = 1$. 
+
+- Conversely, the Binomial model is equivalent to a Bernoulli model with $\sum_i m_i$ observations, or a Bernoulli model with observation weights $(y_i, m_i - y_i)$. 
+
+- **Q1.** Reformat the data to have $n = \sum_i m_i$ rows, with the binary outcome to represent there are $n = \sum_i m_i$ Bernoulli trials conducted. 
+
+- **Q2.** Refitted the model using logistic regression (`glm`) using the reformatted data above (no weights are needed) and show it is equivalent to the Binomial model and Bernoulli model with weights. 
+
+- **Q3.** Write out the log-likelihood for above model and show it is equivalent to the Binomial model and Bernoulli model with weights.
