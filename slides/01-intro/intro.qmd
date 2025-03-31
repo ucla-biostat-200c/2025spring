@@ -54,6 +54,6 @@ knitr:
 
 ## Course description
 
--   Read [syllabus](https://ucla-biostat-200c.github.io/2024spring/syllabus/syllabus.html) and [schedule](https://ucla-biostat-200c.github.io/2024spring/schedule/schedule.html) for a tentative list of topics and course logistics.
+-   Read [syllabus](https://ucla-biostat-200c.github.io/2025spring/syllabus/syllabus.html) and [schedule](https://ucla-biostat-200c.github.io/2025spring/schedule/schedule.html) for a tentative list of topics and course logistics.
 
 -   Teaching philosophy. Usually a GLM course is taught on blackboard/whiteboard with mostly math derivations. In this course, I will start from R code and then explain the theory behind it.
