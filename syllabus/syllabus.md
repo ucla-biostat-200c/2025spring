@@ -27,7 +27,9 @@ Zoom: (Optional) <https://ucla.zoom.us/j/5842633983>
 
 ### Teaching Assistant
 
-Cindy Pang <cindypang@ucla.edu>
+Cindy Pang 
+
+Email: <cindypang@ucla.edu>
 
 Office hours: See Cindy's email. 
 
