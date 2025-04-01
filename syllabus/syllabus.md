@@ -43,8 +43,8 @@ This is a tentative list of topics:
 * Multinomial data (10%)   
 * Generalized linear models (15%)   
 * GAM (10%)  
-* Regression trees (10%)  
-* Mixed effects model (20%)  
+* Regression trees (15%)  
+* Mixed effects model (15%)  
 
 ### Prerequisite
 

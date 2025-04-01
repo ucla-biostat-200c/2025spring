@@ -22,6 +22,28 @@ knitr:
     cache: false
 ---
 
+## Brief intro
+
+### Myself
+#### Before 2021
+- PhD in Biomathematics, UCLA (the department was renamed to ["UCLA Computational Medicine"](https://compmed.ucla.edu/))
+- Postdoc \& Statistician, Harvard University
+  + Department of Biostatistics
+  + Channing's Lab, Brigham and Women's Hospital
+- Assistant \& Associate professor,  University of Arizona (UofA)
+  + Department of Epidemiology and Biostatistics 
+  + Statistics and Genetics Graduate Interdisciplinary Program (GIDP)
+- Adjunct Associate Professor, UCLA
+  + Department of Medicine Statistics Core (DOMStat)
+
+#### 2021 - Present
+- Research principal investigator, Phoenix VA Health Care System
+- Research principal investigator, Greater Los Angeles VA Health Care System
+- Associate Professor-in-Residence of Biostatistics, UCLA
+  + Department of Biostatistics 
+
+### You?
+
 ## Course webpages
 
 - Github site: <https://ucla-biostat-200c.github.io/2025spring/>
