@@ -277,7 +277,7 @@ lmodi <- lm(undercount ~ cperAA + cpergore * usage + equip, gavote)
 summary(lmodi)
 ```
 
-The `gtsummary` package offers a more sensible diplay of regression results.
+The `gtsummary` package offers a more sensible display of regression results.
 ```{r}
 library(gtsummary)
 lmodi %>%
@@ -437,7 +437,8 @@ plmodi %>%
 termplot(plmodi, partial.resid = TRUE, terms = 2)
 ```
 
-    - _B-slines_:
+  _B-slines_:
+    
 ```{r}
 library(splines)
 blmodi <- lm(undercount ~ cperAA + bs(cpergore, 4) + usage + equip, gavote)
